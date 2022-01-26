@@ -81,12 +81,38 @@ void Scanner::scan_token() {
     line++;
     break;
   default:
-    std::string message = "Unexpected character: ";
-    message.push_back(c);
-    Vm::error(line, message);
+    if (is_digit(c)) {
+      number();
+    } else {
+      std::string message = "Unexpected character: ";
+      message.push_back(c);
+      Vm::error(line, message);
+    }
+
     break;
   }
 
+  return;
+}
+
+bool Scanner::is_digit(char c) { return c >= '0' && c <= '9'; }
+
+void Scanner::number() {
+  while (is_digit(peek())) {
+    advance();
+  }
+
+  if (peek() == '.' && is_digit(peek_next())) {
+    advance();
+
+    while (is_digit(peek())) {
+      advance();
+    }
+  }
+
+  std::shared_ptr<Number> value = std::make_shared<Number>(
+      std::stod(source.substr(start, current - start)));
+  add_token(TokenType::NUMBER, value);
   return;
 }
 
@@ -116,6 +142,13 @@ char Scanner::peek() {
     return source[current];
   }
   return '\0';
+}
+
+char Scanner::peek_next() {
+  if (current + 1 >= source.length())
+    return '\0';
+
+  return source[current + 1];
 }
 
 bool Scanner::match(char expected) {
