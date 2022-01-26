@@ -105,8 +105,9 @@ void Scanner::string() {
 
   advance();
 
-  // std::string text = source.substr(start + 1, current - 1);
-  // add_token(TokenType::STRING, text);
+  std::shared_ptr<String> text = std::make_shared<String>(
+      String(source.substr(start + 1, current - start - 2)));
+  add_token(TokenType::STRING, text);
   return;
 }
 
@@ -135,8 +136,8 @@ void Scanner::add_token(TokenType type) {
   return;
 }
 
-void Scanner::add_token(TokenType type, Object *literal) {
-  std::string text = source.substr(start, current);
+void Scanner::add_token(TokenType type, std::shared_ptr<Object> literal) {
+  std::string text = source.substr(start, current - start);
   tokens.push_back(Token(type, text, literal, line));
   return;
 }

@@ -2,6 +2,7 @@
 #define TOKEN_H
 
 #include "vm/object.h"
+#include <memory>
 #include <string>
 
 enum class TokenType {
@@ -56,7 +57,8 @@ enum class TokenType {
 
 class Token final {
 public:
-  Token(TokenType type, std::string lexeme, Object *literal, int line)
+  Token(TokenType type, std::string lexeme, std::shared_ptr<Object> literal,
+        int line)
       : type(type), lexeme(lexeme), literal(literal), line(line) {}
 
   std::string to_string() const;
@@ -64,7 +66,7 @@ public:
 private:
   const TokenType type;
   const std::string lexeme;
-  const Object *literal;
+  const std::shared_ptr<Object> literal;
   const int line;
   const std::string token_names[39] = {
       "LEFT_PAREN", "RIGHT_PAREN",   "LEFT_BRACE", "RIGHT_BRACE", "COMMA",

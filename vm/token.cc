@@ -1,7 +1,13 @@
 #include "vm/token.h"
 
 std::string Token::to_string() const {
-  return token_name() + " " + lexeme + " " + literal->to_string();
+  std::string text = token_name() + " " + lexeme;
+
+  if (literal) {
+    text += " " + literal->to_string();
+  }
+
+  return text;
 }
 
 std::string Token::token_name() const {

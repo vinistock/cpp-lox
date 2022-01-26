@@ -1,8 +1,10 @@
 #ifndef SCANNER_H
 #define SCANNER_H
 
+#include "vm/string.h"
 #include "vm/token.h"
 #include "vm/vm.h"
+#include <memory>
 #include <string>
 #include <vector>
 
@@ -26,7 +28,7 @@ private:
   void string();
   bool match(char expected);
   void add_token(TokenType type);
-  void add_token(TokenType type, Object *literal);
+  void add_token(TokenType type, std::shared_ptr<Object> literal);
 };
 
 #endif

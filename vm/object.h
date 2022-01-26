@@ -3,9 +3,9 @@
 
 #include <string>
 
-class Object final {
+class Object {
 public:
-  std::string to_string() const;
+  virtual std::string to_string() const = 0;
 };
 
 #endif
