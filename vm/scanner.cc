@@ -83,6 +83,8 @@ void Scanner::scan_token() {
   default:
     if (is_digit(c)) {
       number();
+    } else if (is_alpha(c)) {
+      identifier();
     } else {
       std::string message = "Unexpected character: ";
       message.push_back(c);
@@ -96,6 +98,30 @@ void Scanner::scan_token() {
 }
 
 bool Scanner::is_digit(char c) { return c >= '0' && c <= '9'; }
+
+bool Scanner::is_alpha(char c) {
+  return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '_';
+}
+
+bool Scanner::is_alpha_numeric(char c) { return is_alpha(c) || is_digit(c); }
+
+void Scanner::identifier() {
+  while (is_alpha_numeric(peek())) {
+    advance();
+  }
+
+  std::string text = source.substr(start, current - start);
+  TokenType type;
+
+  try {
+    type = keywords.at(text);
+  } catch (const std::exception &e) {
+    type = TokenType::IDENTIFIER;
+  }
+
+  add_token(type);
+  return;
+}
 
 void Scanner::number() {
   while (is_digit(peek())) {
