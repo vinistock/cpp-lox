@@ -1,3 +1,3 @@
-#include "vm/number.h"
+#include "literals/number.h"
 
 std::string Number::to_string() const { return std::to_string(value); }

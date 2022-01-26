@@ -1,7 +1,7 @@
 #ifndef NUMBER_H
 #define NUMBER_H
 
-#include "vm/object.h"
+#include "literals/object.h"
 
 class Number final : public Object {
 public:

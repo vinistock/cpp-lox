@@ -1,7 +1,7 @@
 #ifndef TOKEN_H
 #define TOKEN_H
 
-#include "vm/object.h"
+#include "literals/object.h"
 #include <memory>
 #include <string>
 

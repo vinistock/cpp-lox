@@ -1,8 +1,8 @@
 #ifndef SCANNER_H
 #define SCANNER_H
 
-#include "vm/number.h"
-#include "vm/string.h"
+#include "literals/number.h"
+#include "literals/string.h"
 #include "vm/token.h"
 #include "vm/vm.h"
 #include <memory>

@@ -1,7 +1,7 @@
 #ifndef STRING_H
 #define STRING_H
 
-#include "vm/object.h"
+#include "literals/object.h"
 #include <string>
 
 class String final : public Object {
