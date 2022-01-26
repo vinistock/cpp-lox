@@ -59,14 +59,15 @@ class Token final {
 public:
   Token(TokenType type, std::string lexeme, std::shared_ptr<Object> literal,
         int line)
-      : type(type), lexeme(lexeme), literal(literal), line(line) {}
+      : type(type), literal(literal), lexeme(lexeme), line(line) {}
 
   std::string to_string() const;
 
-private:
   const TokenType type;
-  const std::string lexeme;
   const std::shared_ptr<Object> literal;
+
+private:
+  const std::string lexeme;
   const int line;
   const std::string token_names[39] = {
       "LEFT_PAREN", "RIGHT_PAREN",   "LEFT_BRACE", "RIGHT_BRACE", "COMMA",
