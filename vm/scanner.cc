@@ -60,13 +60,16 @@ void Scanner::scan_token() {
     add_token(match('=') ? TokenType::GREATER_EQUAL : TokenType::GREATER);
     break;
   case '/':
-    // Parsing comments
     if (match('/')) {
+      // Parsing comments
       while (peek() != '\n' && still_going()) {
         advance();
       }
-      // Parsing division
+    } else if (match('*')) {
+      // Parsing multiline comment
+      multi_line_comment();
     } else {
+      // Parsing division
       add_token(TokenType::SLASH);
     }
     break;
@@ -92,6 +95,33 @@ void Scanner::scan_token() {
     }
 
     break;
+  }
+
+  return;
+}
+
+void Scanner::multi_line_comment() {
+  int level = 1;
+  char peek_char;
+  char peek_next_char;
+
+  while (level > 0) {
+    peek_char = peek();
+    peek_next_char = peek_next();
+
+    if (peek_char == '/' && peek_next_char == '*') {
+      level++;
+      advance();
+    } else if (peek_char == '*' && peek_next_char == '/') {
+      level--;
+      advance();
+    }
+
+    if (peek_char == '\n') {
+      line++;
+    }
+
+    advance();
   }
 
   return;

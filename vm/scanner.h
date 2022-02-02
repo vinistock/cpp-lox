@@ -41,6 +41,7 @@ private:
   char peek_next();
   void string();
   void number();
+  void multi_line_comment();
   void identifier();
   bool is_digit(char c);
   bool is_alpha(char c);
