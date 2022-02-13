@@ -3,6 +3,8 @@
 
 #include "literals/number.h"
 #include "literals/string.h"
+#include "vm/ast_printer.h"
+#include "vm/expr.h"
 #include "vm/token.h"
 #include "vm/vm.h"
 #include <map>
