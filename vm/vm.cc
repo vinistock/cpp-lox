@@ -1,7 +1,4 @@
 #include "vm/vm.h"
-#include "vm/scanner.h"
-#include <string>
-#include <vector>
 
 bool Vm::had_error = false;
 
@@ -22,10 +19,15 @@ void Vm::run(std::string source) {
   Scanner scanner = Scanner(source);
   std::vector<Token> tokens = scanner.scan_tokens();
 
-  for (auto &token : tokens) {
-    std::cout << token.to_string() << std::endl;
+  Parser parser = Parser(tokens);
+  shared_ptr<Expr> expression = parser.parse();
+
+  if (Vm::had_error) {
+    return;
   }
 
+  AstPrinter printer = AstPrinter();
+  std::cout << printer.print(expression).to_string() << std::endl;
   return;
 }
 
@@ -62,6 +64,16 @@ int Vm::runPrompt() {
 
 void Vm::error(int line, std::string message) {
   Vm::report(line, "", message);
+  return;
+}
+
+void Vm::error(Token token, std::string message) {
+  if (token.type == TokenType::ENDOF) {
+    Vm::report(token.line, " at end", message);
+  } else {
+    Vm::report(token.line, " at '" + token.lexeme + "'", message);
+  }
+
   return;
 }
 

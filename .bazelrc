@@ -1,2 +1,11 @@
 build --cxxopt=-std=c++17 --host_cxxopt=-std=c++17
 build --linkopt=-Wl,-undefined,error
+
+# From https://github.com/sorbet/sorbet/blob/bd07507481046927be606cfc6b0e7cc473389698/.bazelrc#L222
+# or else debug symbols are not present
+build:debug --copt=-O0
+build:debug --copt=-g3 --copt=-glldb --copt=-fstandalone-debug --copt=-DDEBUG_SYMBOLS
+build:debug --linkopt=-g3 --linkopt=-glldb --linkopt=-fstandalone-debug --linkopt=-DDEBUG_SYMBOLS
+build:debug --strip=never
+build:debug --spawn_strategy=local
+build:debug --genrule_strategy=local

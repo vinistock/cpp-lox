@@ -2,12 +2,15 @@
 #define EXPRESSIONS_H
 
 #include "literals/object.h"
+#include "literals/string.h"
 #include "vm/token.h"
 
 class Binary;
 class Grouping;
 class Literal;
 class Unary;
+
+using namespace std;
 
 template <class T> class Visitor {
 public:
@@ -22,52 +25,52 @@ public:
   virtual String accept(Visitor<String> *visitor) = 0;
 };
 
-class Binary : public Expr {
+class Binary final : public Expr {
 public:
-  Binary(Expr *left, Token op, Expr *right)
+  Binary(shared_ptr<Expr> left, Token op, shared_ptr<Expr> right)
       : left(left), op(op), right(right) {}
 
   String accept(Visitor<String> *visitor) {
     return visitor->visitBinaryExpr(*this);
   }
 
-  Expr *left;
+  shared_ptr<Expr> left;
   const Token op;
-  Expr *right;
+  shared_ptr<Expr> right;
 };
 
-class Grouping : public Expr {
+class Grouping final : public Expr {
 public:
-  Grouping(Expr *expression) : expression(expression) {}
+  Grouping(shared_ptr<Expr> expression) : expression(expression) {}
 
   String accept(Visitor<String> *visitor) {
     return visitor->visitGroupingExpr(*this);
   }
 
-  Expr *expression;
+  shared_ptr<Expr> expression;
 };
 
-class Literal : public Expr {
+class Literal final : public Expr {
 public:
-  Literal(std::shared_ptr<Object> value) : value(value) {}
+  Literal(shared_ptr<Object> value) : value(value) {}
 
   String accept(Visitor<String> *visitor) {
     return visitor->visitLiteralExpr(*this);
   }
 
-  const std::shared_ptr<Object> value;
+  const shared_ptr<Object> value;
 };
 
-class Unary : public Expr {
+class Unary final : public Expr {
 public:
-  Unary(Token op, Expr *right) : op(op), right(right) {}
+  Unary(Token op, shared_ptr<Expr> right) : op(op), right(right) {}
 
   String accept(Visitor<String> *visitor) {
     return visitor->visitUnaryExpr(*this);
   }
 
   Token op;
-  Expr *right;
+  shared_ptr<Expr> right;
 };
 
 #endif

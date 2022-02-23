@@ -66,9 +66,9 @@ public:
   const TokenType type;
   const std::shared_ptr<Object> literal;
   const std::string lexeme;
+  const int line;
 
 private:
-  const int line;
   const std::string token_names[39] = {
       "LEFT_PAREN", "RIGHT_PAREN",   "LEFT_BRACE", "RIGHT_BRACE", "COMMA",
       "DOT",        "MINUS",         "PLUS",       "SEMICOLON",   "SLASH",
