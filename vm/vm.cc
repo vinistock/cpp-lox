@@ -1,6 +1,7 @@
 #include "vm/vm.h"
 
 bool Vm::had_error = false;
+bool Vm::had_runtime_error = false;
 
 int Vm::execute(int argc, char *argv[]) {
   if (argc > 2) {
@@ -26,8 +27,8 @@ void Vm::run(std::string source) {
     return;
   }
 
-  AstPrinter printer = AstPrinter();
-  std::cout << printer.print(expression).to_string() << std::endl;
+  Interpreter interpreter = Interpreter();
+  interpreter.interpret(expression);
   return;
 }
 
@@ -42,7 +43,16 @@ int Vm::runFile(char *path) {
   input_file.close();
 
   Vm::run(source);
-  return Vm::had_error ? 65 : 0;
+
+  if (Vm::had_error) {
+    return 65;
+  }
+
+  if (Vm::had_runtime_error) {
+    return 70;
+  }
+
+  return 0;
 }
 
 int Vm::runPrompt() {
@@ -82,4 +92,9 @@ void Vm::report(int line, std::string where, std::string message) {
             << std::endl;
   Vm::had_error = true;
   return;
+}
+
+void Vm::runtime_error(Token op, std::string message) {
+  cout << message << "\n[line " << op.line << "]" << endl;
+  Vm::had_runtime_error = true;
 }

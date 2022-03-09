@@ -8,8 +8,9 @@ public:
   Number(double value) : value(value) {}
   std::string to_string() const;
 
-private:
   double value;
+
+private:
 };
 
 #endif

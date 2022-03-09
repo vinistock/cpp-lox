@@ -8,7 +8,6 @@ public:
   Boolean(bool value) : value(value) {}
   std::string to_string() const;
 
-private:
   bool value;
 };
 

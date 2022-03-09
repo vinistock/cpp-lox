@@ -2,6 +2,7 @@
 #define VM_H
 
 #include "vm/ast_printer.h"
+#include "vm/interpreter.h"
 #include "vm/parser.h"
 #include "vm/scanner.h"
 #include "vm/token.h"
@@ -15,9 +16,11 @@ public:
   static int execute(int argc, char *argv[]);
   static void error(int line, std::string message);
   static void error(Token token, std::string message);
+  static void runtime_error(Token op, std::string message);
 
 private:
   static bool had_error;
+  static bool had_runtime_error;
 
   static int runFile(char *path);
   static void run(std::string source);

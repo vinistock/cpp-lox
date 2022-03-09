@@ -1,5 +1,6 @@
 build --cxxopt=-std=c++17 --host_cxxopt=-std=c++17
 build --linkopt=-Wl,-undefined,error
+build --copt=-Wno-potentially-evaluated-expression
 
 # From https://github.com/sorbet/sorbet/blob/bd07507481046927be606cfc6b0e7cc473389698/.bazelrc#L222
 # or else debug symbols are not present

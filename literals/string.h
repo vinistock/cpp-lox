@@ -9,7 +9,6 @@ public:
   String(std::string value) : value(value) {}
   std::string to_string() const;
 
-private:
   std::string value;
 };
 

@@ -23,6 +23,7 @@ public:
 class Expr {
 public:
   virtual String accept(Visitor<String> *visitor) = 0;
+  virtual shared_ptr<Object> accept(Visitor<shared_ptr<Object>> *visitor) = 0;
 };
 
 class Binary final : public Expr {
@@ -31,6 +32,10 @@ public:
       : left(left), op(op), right(right) {}
 
   String accept(Visitor<String> *visitor) {
+    return visitor->visitBinaryExpr(*this);
+  }
+
+  shared_ptr<Object> accept(Visitor<shared_ptr<Object>> *visitor) {
     return visitor->visitBinaryExpr(*this);
   }
 
@@ -47,6 +52,10 @@ public:
     return visitor->visitGroupingExpr(*this);
   }
 
+  shared_ptr<Object> accept(Visitor<shared_ptr<Object>> *visitor) {
+    return visitor->visitGroupingExpr(*this);
+  }
+
   shared_ptr<Expr> expression;
 };
 
@@ -58,6 +67,10 @@ public:
     return visitor->visitLiteralExpr(*this);
   }
 
+  shared_ptr<Object> accept(Visitor<shared_ptr<Object>> *visitor) {
+    return visitor->visitLiteralExpr(*this);
+  }
+
   const shared_ptr<Object> value;
 };
 
@@ -66,6 +79,10 @@ public:
   Unary(Token op, shared_ptr<Expr> right) : op(op), right(right) {}
 
   String accept(Visitor<String> *visitor) {
+    return visitor->visitUnaryExpr(*this);
+  }
+
+  shared_ptr<Object> accept(Visitor<shared_ptr<Object>> *visitor) {
     return visitor->visitUnaryExpr(*this);
   }
 
