@@ -42,6 +42,11 @@ public:
 
   String visitVariableExpr(Variable expr) { return String(expr.name.lexeme); }
 
+  String visitAssignExpr(Assign expr) {
+    vector<shared_ptr<Expr>> exprs = {expr.value};
+    return String(parenthesize(expr.name.lexeme, exprs));
+  }
+
 private:
   string parenthesize(string name, vector<shared_ptr<Expr>> exprs) {
     string result = "(";

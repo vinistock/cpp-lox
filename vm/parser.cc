@@ -1,6 +1,6 @@
 #include "vm/parser.h"
 
-shared_ptr<Expr> Parser::expression() { return equality(); }
+shared_ptr<Expr> Parser::expression() { return assignment(); }
 
 shared_ptr<Expr> Parser::equality() {
   shared_ptr<Expr> expr = comparison();
@@ -227,4 +227,23 @@ shared_ptr<Stmt> Parser::var_declaration() {
 
   consume(TokenType::SEMICOLON, "Expect ';' after variable declaration.");
   return make_shared<Var>(Var(name, initializer));
+}
+
+shared_ptr<Expr> Parser::assignment() {
+  shared_ptr<Expr> expr = equality();
+
+  vector<TokenType> types = {TokenType::EQUAL};
+  if (match(types)) {
+    Token equals = previous();
+    shared_ptr<Expr> value = assignment();
+
+    if (typeid(*expr) == typeid(Variable)) {
+      Token name = dynamic_pointer_cast<Variable>(expr)->name;
+      return make_shared<Assign>(Assign(name, value));
+    }
+
+    Vm::error(equals, "Invalid assignment target.");
+  }
+
+  return expr;
 }

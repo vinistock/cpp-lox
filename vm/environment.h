@@ -11,6 +11,7 @@ using namespace std;
 class Environment final {
 public:
   void define(string name, shared_ptr<Object> value);
+  void assign(Token name, shared_ptr<Object> value);
   shared_ptr<Object> get(Token name);
 
 private:

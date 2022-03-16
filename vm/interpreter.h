@@ -24,6 +24,7 @@ public:
 
   void visitVarStmt(Var stmt);
   shared_ptr<Object> visitVariableExpr(Variable expr);
+  shared_ptr<Object> visitAssignExpr(Assign expr);
 
   void interpret(vector<shared_ptr<Stmt>> statements);
 

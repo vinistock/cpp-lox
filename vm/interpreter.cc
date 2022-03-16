@@ -170,3 +170,9 @@ void Interpreter::visitVarStmt(Var stmt) {
   environment.define(stmt.name.lexeme, value);
   return;
 }
+
+shared_ptr<Object> Interpreter::visitAssignExpr(Assign expr) {
+  shared_ptr<Object> value = evaluate(expr.value);
+  environment.assign(expr.name, value);
+  return value;
+}

@@ -10,6 +10,7 @@ class Grouping;
 class Literal;
 class Unary;
 class Variable;
+class Assign;
 
 using namespace std;
 
@@ -20,6 +21,7 @@ public:
   virtual T visitLiteralExpr(Literal expr) = 0;
   virtual T visitUnaryExpr(Unary expr) = 0;
   virtual T visitVariableExpr(Variable expr) = 0;
+  virtual T visitAssignExpr(Assign expr) = 0;
 };
 
 class Expr {
@@ -105,6 +107,22 @@ public:
   }
 
   Token name;
+};
+
+class Assign final : public Expr {
+public:
+  Assign(Token name, shared_ptr<Expr> value) : name(name), value(value) {}
+
+  String accept(Visitor<String> *visitor) {
+    return visitor->visitAssignExpr(*this);
+  }
+
+  shared_ptr<Object> accept(Visitor<shared_ptr<Object>> *visitor) {
+    return visitor->visitAssignExpr(*this);
+  }
+
+  Token name;
+  shared_ptr<Expr> value;
 };
 
 #endif

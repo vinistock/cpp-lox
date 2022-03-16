@@ -11,3 +11,11 @@ shared_ptr<Object> Environment::get(Token name) {
     throw RuntimeError(name, "Undefined variable '" + name.lexeme + "'.");
   }
 }
+
+void Environment::assign(Token name, shared_ptr<Object> value) {
+  try {
+    values.at(name.lexeme) = value;
+  } catch (const std::exception &e) {
+    throw RuntimeError(name, "Undefined variable '" + name.lexeme + "'.");
+  }
+}
