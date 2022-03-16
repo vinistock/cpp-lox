@@ -5,11 +5,13 @@ using namespace std;
 
 class Expression;
 class Print;
+class Var;
 
 template <class T> class StmtVisitor {
 public:
   virtual T visitExpressionStmt(Expression stmt) = 0;
   virtual T visitPrintStmt(Print stmt) = 0;
+  virtual T visitVarStmt(Var stmt) = 0;
 };
 
 class Stmt {
@@ -37,6 +39,19 @@ public:
   }
 
   shared_ptr<Expr> expr;
+};
+
+class Var final : public Stmt {
+public:
+  Var(Token name, shared_ptr<Expr> initializer)
+      : name(name), initializer(initializer) {}
+
+  void accept(StmtVisitor<void> *visitor) {
+    return visitor->visitVarStmt(*this);
+  }
+
+  Token name;
+  shared_ptr<Expr> initializer;
 };
 
 #endif

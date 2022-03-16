@@ -40,6 +40,8 @@ public:
     return String(parenthesize(expr.op.lexeme, exprs));
   }
 
+  String visitVariableExpr(Variable expr) { return String(expr.name.lexeme); }
+
 private:
   string parenthesize(string name, vector<shared_ptr<Expr>> exprs) {
     string result = "(";

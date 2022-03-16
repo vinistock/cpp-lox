@@ -40,6 +40,8 @@ private:
   shared_ptr<Stmt> statement();
   shared_ptr<Stmt> print_statement();
   shared_ptr<Stmt> expression_statement();
+  shared_ptr<Stmt> declaration();
+  shared_ptr<Stmt> var_declaration();
 };
 
 class ParseError : public exception {

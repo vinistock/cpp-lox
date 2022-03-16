@@ -91,6 +91,11 @@ shared_ptr<Expr> Parser::primary() {
     return make_shared<Literal>(Literal(previous().literal));
   }
 
+  types = {TokenType::IDENTIFIER};
+  if (match(types)) {
+    return make_shared<Variable>(Variable(previous()));
+  }
+
   types = {TokenType::LEFT_PAREN};
   if (match(types)) {
     shared_ptr<Expr> expr = expression();
@@ -166,7 +171,7 @@ vector<shared_ptr<Stmt>> Parser::parse() {
   vector<shared_ptr<Stmt>> statements;
 
   while (!is_at_end()) {
-    statements.push_back(statement());
+    statements.push_back(declaration());
   }
 
   return statements;
@@ -197,3 +202,29 @@ bool Parser::is_at_end() { return peek().type == TokenType::ENDOF; }
 Token Parser::peek() { return tokens[current]; }
 
 Token Parser::previous() { return tokens[current - 1]; }
+
+shared_ptr<Stmt> Parser::declaration() {
+  try {
+    vector<TokenType> types = {TokenType::VAR};
+    if (match(types))
+      return var_declaration();
+
+    return statement();
+  } catch (ParseError error) {
+    synchronize();
+    return nullptr;
+  }
+}
+
+shared_ptr<Stmt> Parser::var_declaration() {
+  Token name = consume(TokenType::IDENTIFIER, "Expect variable name.");
+
+  shared_ptr<Expr> initializer = nullptr;
+  vector<TokenType> types = {TokenType::EQUAL};
+  if (match(types)) {
+    initializer = expression();
+  }
+
+  consume(TokenType::SEMICOLON, "Expect ';' after variable declaration.");
+  return make_shared<Var>(Var(name, initializer));
+}

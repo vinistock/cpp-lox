@@ -155,3 +155,18 @@ void Interpreter::visitPrintStmt(Print stmt) {
   cout << stringify(value) << endl;
   return;
 }
+
+shared_ptr<Object> Interpreter::visitVariableExpr(Variable expr) {
+  return environment.get(expr.name);
+}
+
+void Interpreter::visitVarStmt(Var stmt) {
+  shared_ptr<Object> value = nullptr;
+
+  if (stmt.initializer != nullptr) {
+    value = evaluate(stmt.initializer);
+  }
+
+  environment.define(stmt.name.lexeme, value);
+  return;
+}

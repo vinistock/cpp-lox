@@ -4,6 +4,8 @@
 #include "literals/boolean.h"
 #include "literals/number.h"
 #include "literals/object.h"
+#include "vm/environment.h"
+#include "vm/errors.h"
 #include "vm/expr.h"
 #include "vm/stmt.h"
 #include "vm/vm.h"
@@ -19,9 +21,15 @@ public:
   shared_ptr<Object> visitGroupingExpr(Grouping expr);
   shared_ptr<Object> visitUnaryExpr(Unary expr);
   shared_ptr<Object> visitBinaryExpr(Binary expr);
+
+  void visitVarStmt(Var stmt);
+  shared_ptr<Object> visitVariableExpr(Variable expr);
+
   void interpret(vector<shared_ptr<Stmt>> statements);
 
 private:
+  Environment environment = Environment();
+
   shared_ptr<Object> evaluate(shared_ptr<Expr> expr);
   bool is_truthy(shared_ptr<Object> obj);
   bool is_equal(shared_ptr<Object> a, shared_ptr<Object> b);
@@ -32,14 +40,6 @@ private:
   void visitExpressionStmt(Expression stmt);
   void visitPrintStmt(Print stmt);
   void execute(shared_ptr<Stmt> stmt);
-};
-
-class RuntimeError : public exception {
-public:
-  RuntimeError(Token op, const string &message) : op(op), message(message) {}
-
-  Token op;
-  string message;
 };
 
 #endif

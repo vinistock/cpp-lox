@@ -9,6 +9,7 @@ class Binary;
 class Grouping;
 class Literal;
 class Unary;
+class Variable;
 
 using namespace std;
 
@@ -18,6 +19,7 @@ public:
   virtual T visitGroupingExpr(Grouping expr) = 0;
   virtual T visitLiteralExpr(Literal expr) = 0;
   virtual T visitUnaryExpr(Unary expr) = 0;
+  virtual T visitVariableExpr(Variable expr) = 0;
 };
 
 class Expr {
@@ -88,6 +90,21 @@ public:
 
   Token op;
   shared_ptr<Expr> right;
+};
+
+class Variable final : public Expr {
+public:
+  Variable(Token name) : name(name) {}
+
+  String accept(Visitor<String> *visitor) {
+    return visitor->visitVariableExpr(*this);
+  }
+
+  shared_ptr<Object> accept(Visitor<shared_ptr<Object>> *visitor) {
+    return visitor->visitVariableExpr(*this);
+  }
+
+  Token name;
 };
 
 #endif
