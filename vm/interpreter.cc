@@ -157,7 +157,7 @@ void Interpreter::visitPrintStmt(Print stmt) {
 }
 
 shared_ptr<Object> Interpreter::visitVariableExpr(Variable expr) {
-  return environment.get(expr.name);
+  return environment->get(expr.name);
 }
 
 void Interpreter::visitVarStmt(Var stmt) {
@@ -167,12 +167,12 @@ void Interpreter::visitVarStmt(Var stmt) {
     value = evaluate(stmt.initializer);
   }
 
-  environment.define(stmt.name.lexeme, value);
+  environment->define(stmt.name.lexeme, value);
   return;
 }
 
 shared_ptr<Object> Interpreter::visitAssignExpr(Assign expr) {
   shared_ptr<Object> value = evaluate(expr.value);
-  environment.assign(expr.name, value);
+  environment->assign(expr.name, value);
   return value;
 }

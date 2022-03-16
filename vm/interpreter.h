@@ -29,7 +29,7 @@ public:
   void interpret(vector<shared_ptr<Stmt>> statements);
 
 private:
-  Environment environment = Environment();
+  shared_ptr<Environment> environment = make_shared<Environment>(Environment());
 
   shared_ptr<Object> evaluate(shared_ptr<Expr> expr);
   bool is_truthy(shared_ptr<Object> obj);
