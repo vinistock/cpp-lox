@@ -162,12 +162,34 @@ void Parser::synchronize() {
   }
 }
 
-shared_ptr<Expr> Parser::parse() {
-  try {
-    return expression();
-  } catch (ParseError &error) {
-    return nullptr;
+vector<shared_ptr<Stmt>> Parser::parse() {
+  vector<shared_ptr<Stmt>> statements;
+
+  while (!is_at_end()) {
+    statements.push_back(statement());
   }
+
+  return statements;
+}
+
+shared_ptr<Stmt> Parser::statement() {
+  vector<TokenType> types = {TokenType::PRINT};
+  if (match(types))
+    return print_statement();
+
+  return expression_statement();
+}
+
+shared_ptr<Stmt> Parser::print_statement() {
+  shared_ptr<Expr> value = expression();
+  consume(TokenType::SEMICOLON, "Expect ';' after value.");
+  return make_shared<Print>(Print(value));
+}
+
+shared_ptr<Stmt> Parser::expression_statement() {
+  shared_ptr<Expr> expr = expression();
+  consume(TokenType::SEMICOLON, "Expect ';' after expression.");
+  return make_shared<Expression>(Expression(expr));
 }
 
 bool Parser::is_at_end() { return peek().type == TokenType::ENDOF; }

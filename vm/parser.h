@@ -3,6 +3,7 @@
 
 #include "literals/boolean.h"
 #include "vm/expr.h"
+#include "vm/stmt.h"
 #include "vm/token.h"
 #include "vm/vm.h"
 #include <exception>
@@ -15,7 +16,7 @@ using namespace std;
 class Parser final {
 public:
   Parser(std::vector<Token> tokens) : tokens(tokens) {}
-  shared_ptr<Expr> parse();
+  vector<shared_ptr<Stmt>> parse();
 
 private:
   const std::vector<Token> tokens;
@@ -36,6 +37,9 @@ private:
   Token peek();
   Token previous();
   void synchronize();
+  shared_ptr<Stmt> statement();
+  shared_ptr<Stmt> print_statement();
+  shared_ptr<Stmt> expression_statement();
 };
 
 class ParseError : public exception {

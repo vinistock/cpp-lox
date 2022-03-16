@@ -5,6 +5,7 @@
 #include "vm/interpreter.h"
 #include "vm/parser.h"
 #include "vm/scanner.h"
+#include "vm/stmt.h"
 #include "vm/token.h"
 #include <fstream>
 #include <iostream>

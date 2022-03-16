@@ -21,14 +21,14 @@ void Vm::run(std::string source) {
   std::vector<Token> tokens = scanner.scan_tokens();
 
   Parser parser = Parser(tokens);
-  shared_ptr<Expr> expression = parser.parse();
+  vector<shared_ptr<Stmt>> statements = parser.parse();
 
   if (Vm::had_error) {
     return;
   }
 
   Interpreter interpreter = Interpreter();
-  interpreter.interpret(expression);
+  interpreter.interpret(statements);
   return;
 }
 

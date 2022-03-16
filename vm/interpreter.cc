@@ -125,14 +125,17 @@ void Interpreter::check_number_operands(Token op, shared_ptr<Object> left,
   throw RuntimeError(op, "Operands must be numbers.");
 }
 
-void Interpreter::interpret(shared_ptr<Expr> expression) {
+void Interpreter::interpret(vector<shared_ptr<Stmt>> statements) {
   try {
-    shared_ptr<Object> value = evaluate(expression);
-    cout << value->to_string() << endl;
+    for (shared_ptr<Stmt> statement : statements) {
+      execute(statement);
+    }
   } catch (RuntimeError &error) {
     Vm::runtime_error(error.op, error.message);
   }
 }
+
+void Interpreter::execute(shared_ptr<Stmt> stmt) { stmt->accept(this); }
 
 string Interpreter::stringify(shared_ptr<Object> object) {
   if (object == nullptr) {
@@ -140,4 +143,15 @@ string Interpreter::stringify(shared_ptr<Object> object) {
   }
 
   return object->to_string();
+}
+
+void Interpreter::visitExpressionStmt(Expression stmt) {
+  evaluate(stmt.expr);
+  return;
+}
+
+void Interpreter::visitPrintStmt(Print stmt) {
+  shared_ptr<Object> value = evaluate(stmt.expr);
+  cout << stringify(value) << endl;
+  return;
 }

@@ -5,19 +5,21 @@
 #include "literals/number.h"
 #include "literals/object.h"
 #include "vm/expr.h"
+#include "vm/stmt.h"
 #include "vm/vm.h"
 #include <string>
 #include <typeinfo>
 
 using namespace std;
 
-class Interpreter : public Visitor<shared_ptr<Object>> {
+class Interpreter : public Visitor<shared_ptr<Object>>,
+                    public StmtVisitor<void> {
 public:
   shared_ptr<Object> visitLiteralExpr(Literal expr);
   shared_ptr<Object> visitGroupingExpr(Grouping expr);
   shared_ptr<Object> visitUnaryExpr(Unary expr);
   shared_ptr<Object> visitBinaryExpr(Binary expr);
-  void interpret(shared_ptr<Expr> expression);
+  void interpret(vector<shared_ptr<Stmt>> statements);
 
 private:
   shared_ptr<Object> evaluate(shared_ptr<Expr> expr);
@@ -27,6 +29,9 @@ private:
   void check_number_operands(Token op, shared_ptr<Object> left,
                              shared_ptr<Object> right);
   string stringify(shared_ptr<Object> object);
+  void visitExpressionStmt(Expression stmt);
+  void visitPrintStmt(Print stmt);
+  void execute(shared_ptr<Stmt> stmt);
 };
 
 class RuntimeError : public exception {
