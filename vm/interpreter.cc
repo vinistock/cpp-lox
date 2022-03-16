@@ -176,3 +176,22 @@ shared_ptr<Object> Interpreter::visitAssignExpr(Assign expr) {
   environment->assign(expr.name, value);
   return value;
 }
+
+void Interpreter::visitBlockStmt(Block stmt) {
+  execute_block(stmt.statements,
+                make_shared<Environment>(Environment(environment)));
+  return;
+}
+
+void Interpreter::execute_block(vector<shared_ptr<Stmt>> statements,
+                                shared_ptr<Environment> environment) {
+  shared_ptr<Environment> previous = this->environment;
+
+  this->environment = environment;
+
+  for (shared_ptr<Stmt> statement : statements) {
+    execute(statement);
+  }
+
+  this->environment = previous;
+}

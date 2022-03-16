@@ -25,8 +25,11 @@ public:
   void visitVarStmt(Var stmt);
   shared_ptr<Object> visitVariableExpr(Variable expr);
   shared_ptr<Object> visitAssignExpr(Assign expr);
+  void visitBlockStmt(Block stmt);
 
   void interpret(vector<shared_ptr<Stmt>> statements);
+  void execute_block(vector<shared_ptr<Stmt>> statements,
+                     shared_ptr<Environment> environment);
 
 private:
   shared_ptr<Environment> environment = make_shared<Environment>(Environment());

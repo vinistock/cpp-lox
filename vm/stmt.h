@@ -1,17 +1,22 @@
 #ifndef STMT_H
 #define STMT_H
 
+#include <memory>
+#include <vector>
+
 using namespace std;
 
 class Expression;
 class Print;
 class Var;
+class Block;
 
 template <class T> class StmtVisitor {
 public:
   virtual T visitExpressionStmt(Expression stmt) = 0;
   virtual T visitPrintStmt(Print stmt) = 0;
   virtual T visitVarStmt(Var stmt) = 0;
+  virtual T visitBlockStmt(Block stmt) = 0;
 };
 
 class Stmt {
@@ -52,6 +57,17 @@ public:
 
   Token name;
   shared_ptr<Expr> initializer;
+};
+
+class Block final : public Stmt {
+public:
+  Block(vector<shared_ptr<Stmt>> statements) : statements(statements) {}
+
+  void accept(StmtVisitor<void> *visitor) {
+    return visitor->visitBlockStmt(*this);
+  }
+
+  vector<shared_ptr<Stmt>> statements;
 };
 
 #endif

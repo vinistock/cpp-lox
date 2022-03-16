@@ -182,6 +182,10 @@ shared_ptr<Stmt> Parser::statement() {
   if (match(types))
     return print_statement();
 
+  types = {TokenType::LEFT_BRACE};
+  if (match(types))
+    return make_shared<Block>(Block(block()));
+
   return expression_statement();
 }
 
@@ -246,4 +250,15 @@ shared_ptr<Expr> Parser::assignment() {
   }
 
   return expr;
+}
+
+vector<shared_ptr<Stmt>> Parser::block() {
+  vector<shared_ptr<Stmt>> statements;
+
+  while (!check(TokenType::RIGHT_BRACE) && !is_at_end()) {
+    statements.push_back(declaration());
+  }
+
+  consume(TokenType::RIGHT_BRACE, "Expect '}' after block.");
+  return statements;
 }
