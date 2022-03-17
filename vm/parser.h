@@ -47,6 +47,7 @@ private:
   shared_ptr<Stmt> var_declaration();
   shared_ptr<Stmt> if_statement();
   shared_ptr<Stmt> while_statement();
+  shared_ptr<Stmt> for_statement();
   vector<shared_ptr<Stmt>> block();
 };
 
