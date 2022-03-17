@@ -186,6 +186,10 @@ shared_ptr<Stmt> Parser::statement() {
   if (match(types))
     return print_statement();
 
+  types = {TokenType::WHILE};
+  if (match(types))
+    return while_statement();
+
   types = {TokenType::LEFT_BRACE};
   if (match(types))
     return make_shared<Block>(Block(block()));
@@ -307,4 +311,13 @@ shared_ptr<Expr> Parser::logical_and() {
   }
 
   return expr;
+}
+
+shared_ptr<Stmt> Parser::while_statement() {
+  consume(TokenType::LEFT_PAREN, "Expect '(' after 'while'.");
+  shared_ptr<Expr> condition = expression();
+  consume(TokenType::RIGHT_PAREN, "Expect ')' after condition.");
+  shared_ptr<Stmt> body = statement();
+
+  return make_shared<While>(While(condition, body));
 }

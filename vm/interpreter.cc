@@ -219,3 +219,11 @@ shared_ptr<Object> Interpreter::visitLogicalExpr(Logical expr) {
 
   return evaluate(expr.right);
 }
+
+void Interpreter::visitWhileStmt(While stmt) {
+  while (is_truthy(evaluate(stmt.condition))) {
+    execute(stmt.body);
+  }
+
+  return;
+}

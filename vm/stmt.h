@@ -11,6 +11,7 @@ class Print;
 class Var;
 class Block;
 class If;
+class While;
 
 template <class T> class StmtVisitor {
 public:
@@ -19,6 +20,7 @@ public:
   virtual T visitVarStmt(Var stmt) = 0;
   virtual T visitBlockStmt(Block stmt) = 0;
   virtual T visitIfStmt(If stmt) = 0;
+  virtual T visitWhileStmt(While stmt) = 0;
 };
 
 class Stmt {
@@ -86,6 +88,19 @@ public:
   shared_ptr<Expr> condition;
   shared_ptr<Stmt> then_branch;
   shared_ptr<Stmt> else_branch;
+};
+
+class While final : public Stmt {
+public:
+  While(shared_ptr<Expr> condition, shared_ptr<Stmt> body)
+      : condition(condition), body(body) {}
+
+  void accept(StmtVisitor<void> *visitor) {
+    return visitor->visitWhileStmt(*this);
+  }
+
+  shared_ptr<Expr> condition;
+  shared_ptr<Stmt> body;
 };
 
 #endif
