@@ -43,6 +43,7 @@ private:
   shared_ptr<Stmt> expression_statement();
   shared_ptr<Stmt> declaration();
   shared_ptr<Stmt> var_declaration();
+  shared_ptr<Stmt> if_statement();
   vector<shared_ptr<Stmt>> block();
 };
 

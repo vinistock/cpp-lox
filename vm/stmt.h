@@ -10,6 +10,7 @@ class Expression;
 class Print;
 class Var;
 class Block;
+class If;
 
 template <class T> class StmtVisitor {
 public:
@@ -17,6 +18,7 @@ public:
   virtual T visitPrintStmt(Print stmt) = 0;
   virtual T visitVarStmt(Var stmt) = 0;
   virtual T visitBlockStmt(Block stmt) = 0;
+  virtual T visitIfStmt(If stmt) = 0;
 };
 
 class Stmt {
@@ -68,6 +70,22 @@ public:
   }
 
   vector<shared_ptr<Stmt>> statements;
+};
+
+class If final : public Stmt {
+public:
+  If(shared_ptr<Expr> condition, shared_ptr<Stmt> then_branch,
+     shared_ptr<Stmt> else_branch)
+      : condition(condition), then_branch(then_branch),
+        else_branch(else_branch) {}
+
+  void accept(StmtVisitor<void> *visitor) {
+    return visitor->visitIfStmt(*this);
+  }
+
+  shared_ptr<Expr> condition;
+  shared_ptr<Stmt> then_branch;
+  shared_ptr<Stmt> else_branch;
 };
 
 #endif

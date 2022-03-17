@@ -178,7 +178,11 @@ vector<shared_ptr<Stmt>> Parser::parse() {
 }
 
 shared_ptr<Stmt> Parser::statement() {
-  vector<TokenType> types = {TokenType::PRINT};
+  vector<TokenType> types = {TokenType::IF};
+  if (match(types))
+    return if_statement();
+
+  types = {TokenType::PRINT};
   if (match(types))
     return print_statement();
 
@@ -261,4 +265,20 @@ vector<shared_ptr<Stmt>> Parser::block() {
 
   consume(TokenType::RIGHT_BRACE, "Expect '}' after block.");
   return statements;
+}
+
+shared_ptr<Stmt> Parser::if_statement() {
+  consume(TokenType::LEFT_PAREN, "Expect '(' after 'if'.");
+  shared_ptr<Expr> condition = expression();
+  consume(TokenType::RIGHT_PAREN, "Expect ')' after if condition.");
+
+  shared_ptr<Stmt> then_branch = statement();
+  shared_ptr<Stmt> else_branch = nullptr;
+
+  vector<TokenType> types = {TokenType::ELSE};
+  if (match(types)) {
+    else_branch = statement();
+  }
+
+  return make_shared<If>(If(condition, then_branch, else_branch));
 }

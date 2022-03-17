@@ -195,3 +195,13 @@ void Interpreter::execute_block(vector<shared_ptr<Stmt>> statements,
 
   this->environment = previous;
 }
+
+void Interpreter::visitIfStmt(If stmt) {
+  if (is_truthy(evaluate(stmt.condition))) {
+    execute(stmt.then_branch);
+  } else if (stmt.else_branch != nullptr) {
+    execute(stmt.else_branch);
+  }
+
+  return;
+}
