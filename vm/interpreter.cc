@@ -205,3 +205,17 @@ void Interpreter::visitIfStmt(If stmt) {
 
   return;
 }
+
+shared_ptr<Object> Interpreter::visitLogicalExpr(Logical expr) {
+  shared_ptr<Object> left = evaluate(expr.left);
+
+  if (expr.op.type == TokenType::OR) {
+    if (is_truthy(left))
+      return left;
+  } else {
+    if (!is_truthy(left))
+      return left;
+  }
+
+  return evaluate(expr.right);
+}

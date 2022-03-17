@@ -238,7 +238,7 @@ shared_ptr<Stmt> Parser::var_declaration() {
 }
 
 shared_ptr<Expr> Parser::assignment() {
-  shared_ptr<Expr> expr = equality();
+  shared_ptr<Expr> expr = logical_or();
 
   vector<TokenType> types = {TokenType::EQUAL};
   if (match(types)) {
@@ -281,4 +281,30 @@ shared_ptr<Stmt> Parser::if_statement() {
   }
 
   return make_shared<If>(If(condition, then_branch, else_branch));
+}
+
+shared_ptr<Expr> Parser::logical_or() {
+  shared_ptr<Expr> expr = logical_and();
+
+  vector<TokenType> types = {TokenType::OR};
+  while (match(types)) {
+    Token op = previous();
+    shared_ptr<Expr> right = logical_and();
+    expr = make_shared<Logical>(Logical(expr, op, right));
+  }
+
+  return expr;
+}
+
+shared_ptr<Expr> Parser::logical_and() {
+  shared_ptr<Expr> expr = equality();
+
+  vector<TokenType> types = {TokenType::AND};
+  while (match(types)) {
+    Token op = previous();
+    shared_ptr<Expr> right = equality();
+    expr = make_shared<Logical>(Logical(expr, op, right));
+  }
+
+  return expr;
 }

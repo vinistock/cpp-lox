@@ -27,6 +27,7 @@ public:
   shared_ptr<Object> visitAssignExpr(Assign expr);
   void visitBlockStmt(Block stmt);
   void visitIfStmt(If stmt);
+  shared_ptr<Object> visitLogicalExpr(Logical expr);
 
   void interpret(vector<shared_ptr<Stmt>> statements);
   void execute_block(vector<shared_ptr<Stmt>> statements,

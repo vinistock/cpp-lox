@@ -30,6 +30,8 @@ private:
   shared_ptr<Expr> unary();
   shared_ptr<Expr> primary();
   shared_ptr<Expr> assignment();
+  shared_ptr<Expr> logical_or();
+  shared_ptr<Expr> logical_and();
   bool match(std::vector<TokenType> types);
   bool check(TokenType type);
   Token advance();
